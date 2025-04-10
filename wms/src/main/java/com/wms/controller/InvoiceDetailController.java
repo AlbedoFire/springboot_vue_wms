@@ -11,6 +11,7 @@ package com.wms.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.InvoiceDetail;
+import com.wms.entity.Invoices;
 import com.wms.service.InvoiceDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,16 @@ public class InvoiceDetailController {
         return invoiceDetailService.removeById(id) ? Result.suc() : Result.fail();
     }
 
+    // 创建发票明细
+    @PostMapping
+    public Result createInvoiceDetail(@RequestBody InvoiceDetail invoiceDetail) {
+        boolean saved = invoiceDetailService.save(invoiceDetail);
+        if (saved) {
+            return Result.suc(invoiceDetail);
+        } else {
+            return Result.fail();
+        }
+    }
     // 根据ID获取发票明细
     @GetMapping("/{id}")
     public Result getInvoiceDetailById(@PathVariable Integer id) {
@@ -50,6 +61,18 @@ public class InvoiceDetailController {
         } else {
             return Result.fail();
         }
+    }
+    // 根据ID更新发票明细
+    @PutMapping("/{id}")
+    public Result updateInvoiceDetailById(@PathVariable Integer id,@RequestBody InvoiceDetail invoiceDetail) {
+        invoiceDetail.setId(id);
+        boolean updated = invoiceDetailService.updateById(invoiceDetail);
+        if (updated) {
+            return Result.suc(invoiceDetail);
+        }else {
+            return Result.fail();
+        }
+
     }
 
     // 获取所有发票明细

@@ -181,7 +181,7 @@
           'Content-Type': 'multipart/form-data'
         }
       });
-
+      console.log(response.data);
       const invoiceData = this.parseInvoiceData(response.data);
       
       // 填充表单
@@ -201,14 +201,7 @@
 
   parseInvoiceData(data) {
     // 根据接口返回的JSON结构解析发票信息
-    return {
-      invoiceNumber: data.number || '',  // 发票代码
-      issueDate: data.date,      // 开票日期
-      totalAmount: data.totalAmount || 0,     // 总金额
-      taxAmount: data.taxAmount || 0,        // 税额
-      currency: 'CNY',                       // 默认人民币
-      status: 'issued'                       // 默认状态
-    };
+    return data;
   }
     },
     created() {

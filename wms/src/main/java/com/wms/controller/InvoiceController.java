@@ -68,4 +68,12 @@ public class InvoiceController {
         pageObj = invoiceService.page(pageObj);
         return Result.suc(pageObj.getRecords(), pageObj.getTotal());
     }
+    @GetMapping("/lastInsertId")
+    public Result getLastInsertId() {
+        Long lastInsertId = invoiceService.getLastInsertId();
+        if (lastInsertId == null) {
+            return Result.fail();
+        }
+        return Result.suc(lastInsertId,1L);
+    }
 }

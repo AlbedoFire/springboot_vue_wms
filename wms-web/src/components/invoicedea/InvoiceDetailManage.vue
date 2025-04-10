@@ -213,14 +213,25 @@
           'Content-Type': 'multipart/form-data'
         }
       });
-
+      const res2 = await axios.get('/invoice/lastInsertId');
+      const lastid = res2.data.data; // 获取最新的发票ID
       const invoiceData = this.parseInvoiceData(response.data);
       
+      for (const item of invoiceData) {
+        console.log(item);
+        this.form = { ...item };
+        this.form.pdf_name = file.name; // 设置pdf名字
+        this.form.invoiceId = lastid; // 设置发票ID
+        await axios.post(`/invoice-details`, this.form);
+        console.log(this.form);
+        console.log('明细新增成功');
+        this.$message.success('明细新增成功');
+      }
       // 填充表单
-      this.form = { ...invoiceData };
-      this.dialogTitle = 'PDF识别结果';
-      this.dialogFormVisible = true;
-      
+      // this.form = { ...invoiceData };
+      // this.dialogTitle = 'PDF识别结果';
+      // this.dialogFormVisible = true;
+      this.fetchInvoiceDetails(); // 刷新明细列表
       this.$message.success('PDF解析成功');
     } catch (error) {
       console.error(error);
@@ -233,14 +244,7 @@
 
   parseInvoiceData(data) {
     // 根据接口返回的JSON结构解析发票信息
-    return {
-      invoiceNumber: data.number || '',  // 发票代码
-      issueDate: data.date,      // 开票日期
-      totalAmount: data.totalAmount || 0,     // 总金额
-      taxAmount: data.taxAmount || 0,        // 税额
-      currency: 'CNY',                       // 默认人民币
-      status: 'issued'                       // 默认状态
-    };
+    return data.detailList;
   }
     },
     watch: {

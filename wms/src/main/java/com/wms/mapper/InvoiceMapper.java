@@ -9,9 +9,12 @@
 package com.wms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wms.entity.Invoice;
+import org.apache.ibatis.annotations.Select;
 import org.mapstruct.Mapper;
 
 @Mapper
 public interface InvoiceMapper extends BaseMapper<Invoice> {
     // 在这里可以添加自定义的查询方法（如果需要）
+    @Select("SELECT MAX(id) from invoice")
+    Long getLastInsertId();
 }
