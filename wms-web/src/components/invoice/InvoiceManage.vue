@@ -1,5 +1,8 @@
 <template>
     <div>
+      <el-button type="primary" @click="openAddForm">新增发票</el-button>
+      <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
+      
       <!-- 发票列表 -->
       <el-table :data="invoices" style="width: 100%">
         <el-table-column prop="id" label="ID"></el-table-column>
@@ -50,6 +53,16 @@
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
+        <el-upload
+          action="#"
+          :show-file-list="false"
+          :before-upload="handleFileUpload"
+          accept="application/pdf">
+          <el-button type="primary" :loading="isProcessing">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传PDF文件，且不超过10MB</div>
+        </el-upload>
+      </el-dialog>
     </div>
   </template>
   
@@ -64,6 +77,8 @@
         pageSize: 10, // 每页显示条数
         total: 0, // 总记录数
         dialogFormVisible: false, // 控制表单对话框的显示
+        uploadDialogVisible: false, // 控制上传对话框的显示
+        isProcessing: false, // 控制上传按钮的加载状态
         dialogTitle: '', // 对话框标题
         form: {
           id: null,
@@ -149,7 +164,52 @@
       handleCurrentChange(newPage) {
         this.currentPage = newPage;
         this.fetchInvoices();
-      }
+      },
+      openUploadDialog() {
+      this.uploadDialogVisible = true;
+    },
+    async handleFileUpload(file) {
+    if (!file) return;
+
+    this.isProcessing = true;
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post('http://invoice.heycore.com/invoice/extrat', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      const invoiceData = this.parseInvoiceData(response.data);
+      
+      // 填充表单
+      this.form = { ...invoiceData };
+      this.dialogTitle = 'PDF识别结果';
+      this.dialogFormVisible = true;
+      
+      this.$message.success('PDF解析成功');
+    } catch (error) {
+      console.error(error);
+      this.$message.error('PDF解析失败');
+    } finally {
+      this.isProcessing = false;
+      this.uploadDialogVisible = false;
+    }
+  },
+
+  parseInvoiceData(data) {
+    // 根据接口返回的JSON结构解析发票信息
+    return {
+      invoiceNumber: data.number || '',  // 发票代码
+      issueDate: data.date,      // 开票日期
+      totalAmount: data.totalAmount || 0,     // 总金额
+      taxAmount: data.taxAmount || 0,        // 税额
+      currency: 'CNY',                       // 默认人民币
+      status: 'issued'                       // 默认状态
+    };
+  }
     },
     created() {
       this.fetchInvoices(); // 页面加载时获取发票列表
