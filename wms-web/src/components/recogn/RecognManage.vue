@@ -79,7 +79,7 @@
   </template>
   
   <script>
-  import axios from 'axios';
+  import axios from '@/axiosWrapper';
  
   
   export default {
@@ -109,7 +109,7 @@
     },
     methods: {
       fetchInvoices() {
-        axios.get('http://localhost:8090/invoices/page', {
+        axios.get('/invoices/page', {
           params: {
             page: this.currentPage,
             size: this.pageSize
