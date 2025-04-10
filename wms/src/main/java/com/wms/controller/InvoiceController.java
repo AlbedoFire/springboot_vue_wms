@@ -36,34 +36,53 @@ public class InvoiceController {
     }
     // 创建发票
     @PostMapping
-    public Invoice createInvoice(@RequestBody Invoice invoice) {
-        invoiceService.save(invoice);
-        return invoice;
+    public Result createInvoice(@RequestBody Invoice invoice) {
+        boolean saved = invoiceService.save(invoice);
+        if (saved) {
+            return Result.suc(invoice);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 根据ID获取发票
     @GetMapping("/{id}")
-    public Invoice getInvoiceById(@PathVariable Integer id) {
-        return invoiceService.getById(id);
+    public Result getInvoiceById(@PathVariable Integer id) {
+        Invoice invoice = invoiceService.getById(id);
+        if (invoice != null) {
+            return Result.suc(invoice);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 获取所有发票
     @GetMapping
-    public List<Invoice> getAllInvoices() {
-        return invoiceService.list();
+    public Result getAllInvoices() {
+        List<Invoice> invoices = invoiceService.list();
+        return Result.suc(invoices, (long) invoices.size());
     }
 
     // 更新发票
     @PutMapping("/{id}")
-    public Invoice updateInvoice(@PathVariable Integer id, @RequestBody Invoice invoice) {
+    public Result updateInvoice(@PathVariable Integer id, @RequestBody Invoice invoice) {
         invoice.setInvoiceId(id);
-        invoiceService.updateById(invoice);
-        return invoice;
+        boolean updated = invoiceService.updateById(invoice);
+        if (updated) {
+            return Result.suc(invoice);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 删除发票
     @DeleteMapping("/{id}")
-    public void deleteInvoice(@PathVariable Integer id) {
-        invoiceService.removeById(id);
+    public Result deleteInvoice(@PathVariable Integer id) {
+        boolean deleted = invoiceService.removeById(id);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
     }
 }

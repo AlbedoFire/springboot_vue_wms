@@ -34,35 +34,53 @@ public class CustomerController {
     }
     // 创建客户
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        this.customer = customer;
-        customerService.save(customer);
-        return customer;
+    public Result createCustomer(@RequestBody Customer customer) {
+        boolean saved = customerService.save(customer);
+        if (saved) {
+            return Result.suc(customer);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 根据ID获取客户
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Integer id) {
-        return customerService.getById(id);
+    public Result getCustomerById(@PathVariable Integer id) {
+        Customer customer = customerService.getById(id);
+        if (customer != null) {
+            return Result.suc(customer);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 获取所有客户
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.list();
+    public Result getAllCustomers() {
+        List<Customer> customers = customerService.list();
+        return Result.suc(customers, (long) customers.size());
     }
 
     // 更新客户
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    public Result updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
         customer.setCustomerId(id);
-        customerService.updateById(customer);
-        return customer;
+        boolean updated = customerService.updateById(customer);
+        if (updated) {
+            return Result.suc(customer);
+        } else {
+            return Result.fail();
+        }
     }
 
     // 删除客户
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable Integer id) {
-        customerService.removeById(id);
+    public Result deleteCustomer(@PathVariable Integer id) {
+        boolean deleted = customerService.removeById(id);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
     }
 }
