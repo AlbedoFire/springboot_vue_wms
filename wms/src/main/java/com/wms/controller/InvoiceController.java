@@ -1,49 +1,45 @@
-
+/*
+ * Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
 
 package com.wms.controller;
-
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.Invoice;
-import com.wms.entity.Invoice;
 import com.wms.service.InvoiceService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/invoice")
 public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
-    //新增
+
+    // 新增发票
     @PostMapping("/save")
-    public Result save(@RequestBody Invoice invoice){
-        return invoiceService.save(invoice)?Result.suc():Result.fail();
+    public Result save(@RequestBody Invoice invoice) {
+        return invoiceService.save(invoice) ? Result.suc() : Result.fail();
     }
-    //更新
+
+    // 更新发票
     @PostMapping("/update")
-    public Result update(@RequestBody Invoice invoice){
-        return invoiceService.updateById(invoice)?Result.suc():Result.fail();
+    public Result update(@RequestBody Invoice invoice) {
+        return invoiceService.updateById(invoice) ? Result.suc() : Result.fail();
     }
-    //删除
+
+    // 删除发票
     @GetMapping("/del")
-    public Result del(@RequestParam String id){
-        return invoiceService.removeById(id)?Result.suc():Result.fail();
-    }
-    // 创建发票
-    @PostMapping
-    public Result createInvoice(@RequestBody Invoice invoice) {
-        boolean saved = invoiceService.save(invoice);
-        if (saved) {
-            return Result.suc(invoice);
-        } else {
-            return Result.fail();
-        }
+    public Result del(@RequestParam Integer id) {
+        return invoiceService.removeById(id) ? Result.suc() : Result.fail();
     }
 
     // 根据ID获取发票
@@ -64,38 +60,12 @@ public class InvoiceController {
         return Result.suc(invoices, (long) invoices.size());
     }
 
-    // 更新发票
-    @PutMapping("/{id}")
-    public Result updateInvoice(@PathVariable Integer id, @RequestBody Invoice invoice) {
-        invoice.setInvoiceId(id);
-        boolean updated = invoiceService.updateById(invoice);
-        if (updated) {
-            return Result.suc(invoice);
-        } else {
-            return Result.fail();
-        }
-    }
-
-    // 删除发票
-    @DeleteMapping("/{id}")
-    public Result deleteInvoice(@PathVariable Integer id) {
-        boolean deleted = invoiceService.removeById(id);
-        if (deleted) {
-            return Result.suc();
-        } else {
-            return Result.fail();
-        }
-    }
     // 分页查询发票
     @GetMapping("/page")
     public Result getInvoicesByPage(@RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer size) {
-        // 创建分页对象
         Page<Invoice> pageObj = new Page<>(page, size);
-        // 执行分页查询
         pageObj = invoiceService.page(pageObj);
-        // 封装结果
         return Result.suc(pageObj.getRecords(), pageObj.getTotal());
     }
-
 }

@@ -6,10 +6,14 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.wms.service.se;
+package com.wms.mapper;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.wms.entity.se.InvoiceDetail;
 
-public interface InvoiceDetailService extends IService<InvoiceDetail> {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.entity.InvoiceDetail;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface InvoiceDetailMapper extends BaseMapper<InvoiceDetail> {
+    // 在这里可以添加自定义的查询方法（如果需要）
 }

@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.wms.entity.se;
+package com.wms.entity;
 
 
 import com.baomidou.mybatisplus.annotation.*;

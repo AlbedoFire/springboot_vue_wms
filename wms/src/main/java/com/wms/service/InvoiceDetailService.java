@@ -6,10 +6,10 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.wms.service.se;
+package com.wms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wms.entity.se.Invoice;
+import com.wms.entity.InvoiceDetail;
 
-public interface InvoiceService extends IService<Invoice> {
+public interface InvoiceDetailService extends IService<InvoiceDetail> {
 }

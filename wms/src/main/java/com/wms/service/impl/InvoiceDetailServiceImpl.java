@@ -6,12 +6,12 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.wms.service.se.impl;
+package com.wms.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wms.entity.se.InvoiceDetail;
-import com.wms.mapper.se.InvoiceDetailMapper;
-import com.wms.service.se.InvoiceDetailService;
+import com.wms.entity.InvoiceDetail;
+import com.wms.mapper.InvoiceDetailMapper;
+import com.wms.service.InvoiceDetailService;
 import org.springframework.stereotype.Service;
 
 @Service

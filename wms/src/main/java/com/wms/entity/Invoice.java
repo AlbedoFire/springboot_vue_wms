@@ -1,46 +1,94 @@
+/*
+ * Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.wms.entity;
+
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.util.Date;
 
-@EqualsAndHashCode(callSuper = false)
 @Data
-@TableName("invoices")
+@TableName("invoice") // 指定表名
 public class Invoice {
-    @TableId(type = IdType.AUTO)
-    private Integer invoiceId;
+    @TableId(type = IdType.AUTO) // 主键，自增
+    private Integer id;
 
-    @TableField("invoice_number")
-    private String invoiceNumber;
+    @TableField("title")
+    private String title;
 
-    @TableField("issue_date")
-    private LocalDate issueDate;
+    @TableField("machine_number")
+    private String machineNumber;
 
-    @TableField("due_date")
-    private LocalDate dueDate;
+    @TableField("code")
+    private String code;
 
-    @TableField("total_amount")
-    private Double totalAmount;
+    @TableField("number")
+    private String number;
+
+    @TableField("date")
+    private Date date;
+
+    @TableField("checksum")
+    private String checksum;
+
+    @TableField("buyer_name")
+    private String buyerName;
+
+    @TableField("buyer_code")
+    private String buyerCode;
+
+    @TableField("buyer_address")
+    private String buyerAddress;
+
+    @TableField("buyer_account")
+    private String buyerAccount;
+
+    @TableField("password")
+    private String password;
+
+    @TableField("amount")
+    private BigDecimal amount;
 
     @TableField("tax_amount")
-    private Double taxAmount;
+    private BigDecimal taxAmount;
 
-    @TableField("currency")
-    private String currency;
+    @TableField("total_amount_string")
+    private String totalAmountString;
 
-    @TableField("status")
-    private String status;
+    @TableField("total_amount")
+    private BigDecimal totalAmount;
 
-    @TableField("customer_id")
-    private Integer customerId;
+    @TableField("seller_name")
+    private String sellerName;
 
-    @TableField("created_at")
-    private LocalDateTime createdAt;
+    @TableField("seller_code")
+    private String sellerCode;
 
-    @TableField("updated_at")
-    private LocalDateTime updatedAt;
+    @TableField("seller_address")
+    private String sellerAddress;
+
+    @TableField("seller_account")
+    private String sellerAccount;
+
+    @TableField("payee")
+    private String payee;
+
+    @TableField("reviewer")
+    private String reviewer;
+
+    @TableField("drawer")
+    private String drawer;
+
+    @TableField("type")
+    private String type;
+
+
 }
