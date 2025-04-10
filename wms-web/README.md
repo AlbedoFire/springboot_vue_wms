@@ -1,24 +1,19 @@
 # wms-web
 
-## Project setup
+## 安装库
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 启动前端
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### 使用的接口
 
-### Lints and fixes files
-```
-npm run lint
-```
+`http://invoice.heycore.com/invoice/extrat`
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 借鉴引用
+[pdf电子发票识别](https://www.cnblogs.com/little-horse/p/18342700)
+

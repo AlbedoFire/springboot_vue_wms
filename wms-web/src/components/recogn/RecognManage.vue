@@ -29,41 +29,44 @@
       </el-pagination>
   
       <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
-          <el-form-item label="发票编号" label-width="120px">
-            <el-input v-model="form.invoiceNumber" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="开具日期" label-width="120px">
-            <el-date-picker v-model="form.issueDate" type="date" placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="到期日期" label-width="120px">
-            <el-date-picker v-model="form.dueDate" type="date" placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="总金额" label-width="120px">
-            <el-input v-model.number="form.totalAmount" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="税额" label-width="120px">
-            <el-input v-model.number="form.taxAmount" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="货币类型" label-width="120px">
-            <el-select v-model="form.currency" placeholder="请选择货币类型">
-              <el-option label="人民币" value="CNY"></el-option>
-              <el-option label="美元" value="USD"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" label-width="120px">
-            <el-select v-model="form.status" placeholder="请选择状态">
-              <el-option label="已开具" value="issued"></el-option>
-              <el-option label="已支付" value="paid"></el-option>
-              <el-option label="逾期" value="overdue"></el-option>
-              <el-option label="已取消" value="cancelled"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="saveInvoice">保存</el-button>
-        </div>
+      <el-form :model="form" label-width="120px" ref="invoiceForm">
+        <el-form-item label="发票编号" prop="invoiceNumber">
+          <el-input v-model="form.invoiceNumber" placeholder="请输入发票编号" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开具日期" prop="issueDate">
+          <el-date-picker v-model="form.issueDate" type="date" placeholder="选择开具日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="到期日期" prop="dueDate">
+          <el-date-picker v-model="form.dueDate" type="date" placeholder="选择到期日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="总金额" prop="totalAmount">
+          <el-input v-model.number="form.totalAmount" placeholder="请输入总金额" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="税额" prop="taxAmount">
+          <el-input v-model.number="form.taxAmount" placeholder="请输入税额" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="货币类型" prop="currency">
+          <el-select v-model="form.currency" placeholder="请选择货币类型">
+            <el-option label="人民币" value="CNY"></el-option>
+            <el-option label="美元" value="USD"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发票状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择发票状态">
+            <el-option label="已开具" value="issued"></el-option>
+            <el-option label="已支付" value="paid"></el-option>
+            <el-option label="逾期" value="overdue"></el-option>
+            <el-option label="已取消" value="cancelled"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="客户ID" prop="customerId">
+          <el-input v-model.number="form.customerId" placeholder="请输入客户ID" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveInvoice">保存</el-button>
+      </div>
       </el-dialog>
       <el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
         <el-upload
@@ -139,7 +142,8 @@
           totalAmount: 0,
           taxAmount: 0,
           currency: 'CNY',
-          status: 'issued'
+          status: 'issued',
+          customerId: null
         };
         this.dialogFormVisible = true;
       },
@@ -231,7 +235,7 @@
     // 根据接口返回的JSON结构解析发票信息
     return {
       invoiceNumber: data.number || '',  // 发票代码
-      issueDate: data.date || '',      // 开票日期
+      issueDate: data.date,      // 开票日期
       totalAmount: data.totalAmount || 0,     // 总金额
       taxAmount: data.taxAmount || 0,        // 税额
       currency: 'CNY',                       // 默认人民币
