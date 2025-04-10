@@ -11,6 +11,8 @@
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.9",
+    "pdf-lib": "^1.17.1",
+    "tesseract.js": "^6.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.5.4",
     "vuex": "^3.0.0"
