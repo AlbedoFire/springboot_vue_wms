@@ -1,9 +1,10 @@
 package com.wms.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.Customer;
-import com.wms.entity.Customer;
+
 import com.wms.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -82,5 +83,16 @@ public class CustomerController {
         } else {
             return Result.fail();
         }
+    }
+    // 分页查询客户
+    @GetMapping("/page")
+    public Result getCustomersByPage(@RequestParam(defaultValue = "1") Integer page,
+                                     @RequestParam(defaultValue = "10") Integer size) {
+        // 创建分页对象
+        Page<Customer> pageObj = new Page<>(page, size);
+        // 执行分页查询
+        pageObj = customerService.page(pageObj);
+        // 封装结果
+        return Result.suc(pageObj.getRecords(), pageObj.getTotal());
     }
 }

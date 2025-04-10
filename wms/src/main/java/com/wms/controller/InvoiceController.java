@@ -3,6 +3,7 @@
 package com.wms.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.Invoice;
 import com.wms.entity.Invoice;
@@ -85,4 +86,16 @@ public class InvoiceController {
             return Result.fail();
         }
     }
+    // 分页查询发票
+    @GetMapping("/page")
+    public Result getInvoicesByPage(@RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer size) {
+        // 创建分页对象
+        Page<Invoice> pageObj = new Page<>(page, size);
+        // 执行分页查询
+        pageObj = invoiceService.page(pageObj);
+        // 封装结果
+        return Result.suc(pageObj.getRecords(), pageObj.getTotal());
+    }
+
 }

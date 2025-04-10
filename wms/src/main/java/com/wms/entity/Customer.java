@@ -2,9 +2,11 @@ package com.wms.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @TableName("customers")
 public class Customer {
