@@ -302,6 +302,9 @@
           } else {
             // 新增发票
             await axios.post('/invoice/save', this.form);
+            this.form.detailList.forEach(item => {
+              item.invoiceId = this.form.id; // 关联发票ID
+            });
             await axios.post('/invoice-details/update', this.form);
             this.$message.success('发票新增成功');
           }
@@ -376,7 +379,7 @@
       });
       console.log(response.data);
       const invoiceData = this.parseInvoiceData(response.data);
-      
+      this.form.pdfName = file.name;
       // 填充表单
       this.form = { ...invoiceData };
       this.dialogTitle = 'PDF识别结果';
@@ -393,7 +396,16 @@
   },
 
   parseInvoiceData(data) {
+    function formatDate(date) {
+        const isoString = date.toISOString();
+        return isoString; // 输出：2025-04-11T12:34:56.789Z
+    }
+
+    const date = new Date(data.date);
+    const formattedDate = formatDate(date);
+    console.log(formattedDate); // 格式化日期
     // 根据接口返回的JSON结构解析发票信息
+    data.date = formattedDate;
     return data;
   }
     },
