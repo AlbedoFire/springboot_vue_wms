@@ -295,12 +295,20 @@
       async saveInvoice() {
         try {
           if (this.form.id) {
+            this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
+            this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             // 更新发票
             await axios.post('/invoice/update', this.form);
+            this.form.detailList.forEach(item => {
+              item.invoiceId = this.form.id; // 关联发票ID
+            });
             await axios.post('/invoice-details/update', this.form);
+            
             this.$message.success('发票更新成功');
           } else {
             // 新增发票
+            this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
+            this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             await axios.post('/invoice/save', this.form);
             this.form.detailList.forEach(item => {
               item.invoiceId = this.form.id; // 关联发票ID
@@ -396,16 +404,6 @@
   },
 
   parseInvoiceData(data) {
-    function formatDate(date) {
-        const isoString = date.toISOString();
-        return isoString; // 输出：2025-04-11T12:34:56.789Z
-    }
-
-    const date = new Date(data.date);
-    const formattedDate = formatDate(date);
-    console.log(formattedDate); // 格式化日期
-    // 根据接口返回的JSON结构解析发票信息
-    data.date = formattedDate;
     return data;
   }
     },

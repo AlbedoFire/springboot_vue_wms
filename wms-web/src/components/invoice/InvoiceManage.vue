@@ -194,13 +194,25 @@
       async saveInvoice() {
         try {
           if (this.form.id) {
-  
+            this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
+            this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             // 更新发票
             await axios.post('/invoice/update', this.form);
+            this.form.detailList.forEach(item => {
+              item.invoiceId = this.form.id; // 关联发票ID
+            });
+            await axios.post('/invoice-details/update', this.form);
+            
             this.$message.success('发票更新成功');
           } else {
             // 新增发票
+            this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
+            this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             await axios.post('/invoice/save', this.form);
+            this.form.detailList.forEach(item => {
+              item.invoiceId = this.form.id; // 关联发票ID
+            });
+            await axios.post('/invoice-details/update', this.form);
             this.$message.success('发票新增成功');
           }
           this.dialogFormVisible = false;
