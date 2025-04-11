@@ -343,6 +343,7 @@
       openEditForm(invoice) {
         this.dialogTitle = '编辑发票';
         this.form = { ...invoice };
+        this.form.detailList  = axios.get(`/invoice-details/${invoice.id}`);
         this.dialogFormVisible = true;
       },
       resetForm() {

@@ -124,4 +124,5 @@ public class InvoiceDetailController {
             return Result.fail();
         }
     }
+
 }
