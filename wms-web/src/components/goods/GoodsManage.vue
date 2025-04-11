@@ -315,7 +315,7 @@
             this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             await axios.post('/invoice/save', this.form);
             for(let i = 0; i < this.form.detailList.length; i++) {
-              this.form.detailList[i].invoiceId = this.invoiceId.data;
+              this.form.detailList[i].invoiceId = invoiceId.data.data;
                 await axios.post('/invoice-details/save', this.form.detailList[i]);
             }
             this.$message.success('发票新增成功');
