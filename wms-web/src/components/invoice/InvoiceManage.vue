@@ -31,25 +31,89 @@
   
       <!-- 新增/编辑发票表单 -->
       <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-        <el-form :model="form" label-width="120px">
-          <el-form-item label="发票标题">
-            <el-input v-model="form.title"></el-input>
-          </el-form-item>
-          <el-form-item label="发票号码">
-            <el-input v-model="form.number"></el-input>
-          </el-form-item>
-          <el-form-item label="开票日期">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="总金额">
-            <el-input v-model.number="form.total_amount"></el-input>
-          </el-form-item>
-          <el-form-item label="税额">
-            <el-input v-model.number="form.tax_amount"></el-input>
-          </el-form-item>
-        </el-form>
+        <el-form ref="invoiceForm" :model="form" label-width="150px">
+      <el-form-item label="发票标题">
+        <el-input v-model="form.title" placeholder="请输入发票标题"></el-input>
+      </el-form-item>
+      <el-form-item label="机器编号">
+        <el-input v-model="form.machineNumber" placeholder="请输入机器编号"></el-input>
+      </el-form-item>
+      <el-form-item label="代码">
+        <el-input v-model="form.code" placeholder="请输入代码"></el-input>
+      </el-form-item>
+      <el-form-item label="发票号码">
+        <el-input v-model="form.number" placeholder="请输入发票号码"></el-input>
+      </el-form-item>
+      <el-form-item label="开票日期">
+        <el-date-picker
+          v-model="form.date"
+          type="date"
+          placeholder="选择开票日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="校验码">
+        <el-input v-model="form.checksum" placeholder="请输入校验码"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方名称">
+        <el-input v-model="form.buyerName" placeholder="请输入购买方名称"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方税号">
+        <el-input v-model="form.buyerCode" placeholder="请输入购买方税号"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方地址">
+        <el-input v-model="form.buyerAddress" placeholder="请输入购买方地址"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方账号">
+        <el-input v-model="form.buyerAccount" placeholder="请输入购买方账号"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item label="金额">
+        <el-input-number v-model="form.amount" placeholder="请输入金额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="税额">
+        <el-input-number v-model="form.taxAmount" placeholder="请输入税额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="总金额（大写）">
+        <el-input v-model="form.totalAmountString" placeholder="请输入总金额（大写）"></el-input>
+      </el-form-item>
+      <el-form-item label="总金额">
+        <el-input-number v-model="form.totalAmount" placeholder="请输入总金额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="销售方名称">
+        <el-input v-model="form.sellerName" placeholder="请输入销售方名称"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方税号">
+        <el-input v-model="form.sellerCode" placeholder="请输入销售方税号"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方地址">
+        <el-input v-model="form.sellerAddress" placeholder="请输入销售方地址"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方账号">
+        <el-input v-model="form.sellerAccount" placeholder="请输入销售方账号"></el-input>
+      </el-form-item>
+      <el-form-item label="收款人">
+        <el-input v-model="form.payee" placeholder="请输入收款人"></el-input>
+      </el-form-item>
+      <el-form-item label="复核人">
+        <el-input v-model="form.reviewer" placeholder="请输入复核人"></el-input>
+      </el-form-item>
+      <el-form-item label="开票人">
+        <el-input v-model="form.drawer" placeholder="请输入开票人"></el-input>
+      </el-form-item>
+      <el-form-item label="发票类型">
+        <el-input v-model="form.type" placeholder="请输入发票类型"></el-input>
+      </el-form-item>
+      <el-form-item label="PDF 文件名">
+        <el-input v-model="form.pdfName" placeholder="请输入 PDF 文件名"></el-input>
+      </el-form-item>
+    </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
@@ -81,13 +145,31 @@
         isProcessing: false, // 控制上传按钮的加载状态
         dialogTitle: '', // 对话框标题
         form: {
-          id: null,
-          title: '',
-          number: '',
-          date: '',
-          total_amount: 0,
-          tax_amount: 0
-        }
+        title: '',
+        machineNumber: '',
+        code: '',
+        number: '',
+        date: '',
+        checksum: '',
+        buyerName: '',
+        buyerCode: '',
+        buyerAddress: '',
+        buyerAccount: '',
+        password: '',
+        amount: 0,
+        taxAmount: 0,
+        totalAmountString: '',
+        totalAmount: 0,
+        sellerName: '',
+        sellerCode: '',
+        sellerAddress: '',
+        sellerAccount: '',
+        payee: '',
+        reviewer: '',
+        drawer: '',
+        type: '',
+        pdfName: ''
+      }
       };
     },
     methods: {
@@ -112,6 +194,7 @@
       async saveInvoice() {
         try {
           if (this.form.id) {
+  
             // 更新发票
             await axios.post('/invoice/update', this.form);
             this.$message.success('发票更新成功');
@@ -130,6 +213,7 @@
       // 删除发票
       async deleteInvoice(id) {
         try {
+          await axios.get(`/invoice-details/invoice/del/${id}`);
           await axios.get('/invoice/del', { params: { id } });
           this.$message.success('发票删除成功');
           this.fetchInvoices(); // 刷新发票列表
@@ -150,6 +234,9 @@
           tax_amount: 0
         };
         this.dialogFormVisible = true;
+      },
+      resetForm() {
+      this.$refs.invoiceForm.resetFields();
       },
       // 打开编辑发票表单
       openEditForm(invoice) {

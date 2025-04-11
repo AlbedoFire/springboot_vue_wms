@@ -113,4 +113,15 @@ public class InvoiceDetailController {
             return Result.fail();
         }
     }
+    @GetMapping("/invoice/del/{invoiceId}")
+    public Result delByInvoiceId(@PathVariable Integer invoiceId){
+        LambdaQueryWrapper<InvoiceDetail> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(InvoiceDetail::getInvoiceId, invoiceId);
+        boolean deleted = invoiceDetailService.remove(wrapper);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
+    }
 }

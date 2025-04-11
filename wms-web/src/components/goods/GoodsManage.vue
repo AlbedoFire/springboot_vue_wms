@@ -34,25 +34,157 @@
   
       <!-- 新增/编辑发票表单 -->
       <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-        <el-form :model="form" label-width="120px">
-          <el-form-item label="发票标题">
-            <el-input v-model="form.title"></el-input>
-          </el-form-item>
-          <el-form-item label="发票号码">
-            <el-input v-model="form.number"></el-input>
-          </el-form-item>
-          <el-form-item label="开票日期">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="总金额">
-            <el-input v-model.number="form.total_amount"></el-input>
-          </el-form-item>
-          <el-form-item label="税额">
-            <el-input v-model.number="form.tax_amount"></el-input>
-          </el-form-item>
-        </el-form>
+        <el-form ref="invoiceForm" :model="form" label-width="150px">
+      <el-form-item label="发票标题">
+        <el-input v-model="form.title" placeholder="请输入发票标题"></el-input>
+      </el-form-item>
+      <el-form-item label="机器编号">
+        <el-input v-model="form.machineNumber" placeholder="请输入机器编号"></el-input>
+      </el-form-item>
+      <el-form-item label="代码">
+        <el-input v-model="form.code" placeholder="请输入代码"></el-input>
+      </el-form-item>
+      <el-form-item label="发票号码">
+        <el-input v-model="form.number" placeholder="请输入发票号码"></el-input>
+      </el-form-item>
+      <el-form-item label="开票日期">
+        <el-date-picker
+          v-model="form.date"
+          type="date"
+          placeholder="选择开票日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="校验码">
+        <el-input v-model="form.checksum" placeholder="请输入校验码"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方名称">
+        <el-input v-model="form.buyerName" placeholder="请输入购买方名称"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方税号">
+        <el-input v-model="form.buyerCode" placeholder="请输入购买方税号"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方地址">
+        <el-input v-model="form.buyerAddress" placeholder="请输入购买方地址"></el-input>
+      </el-form-item>
+      <el-form-item label="购买方账号">
+        <el-input v-model="form.buyerAccount" placeholder="请输入购买方账号"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item label="金额">
+        <el-input-number v-model="form.amount" placeholder="请输入金额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="税额">
+        <el-input-number v-model="form.taxAmount" placeholder="请输入税额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="总金额（大写）">
+        <el-input v-model="form.totalAmountString" placeholder="请输入总金额（大写）"></el-input>
+      </el-form-item>
+      <el-form-item label="总金额">
+        <el-input-number v-model="form.totalAmount" placeholder="请输入总金额" :min="0" :step="0.01"></el-input-number>
+      </el-form-item>
+      <el-form-item label="销售方名称">
+        <el-input v-model="form.sellerName" placeholder="请输入销售方名称"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方税号">
+        <el-input v-model="form.sellerCode" placeholder="请输入销售方税号"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方地址">
+        <el-input v-model="form.sellerAddress" placeholder="请输入销售方地址"></el-input>
+      </el-form-item>
+      <el-form-item label="销售方账号">
+        <el-input v-model="form.sellerAccount" placeholder="请输入销售方账号"></el-input>
+      </el-form-item>
+      <el-form-item label="收款人">
+        <el-input v-model="form.payee" placeholder="请输入收款人"></el-input>
+      </el-form-item>
+      <el-form-item label="复核人">
+        <el-input v-model="form.reviewer" placeholder="请输入复核人"></el-input>
+      </el-form-item>
+      <el-form-item label="开票人">
+        <el-input v-model="form.drawer" placeholder="请输入开票人"></el-input>
+      </el-form-item>
+      <el-form-item label="发票类型">
+        <el-input v-model="form.type" placeholder="请输入发票类型"></el-input>
+      </el-form-item>
+      <el-form-item label="PDF 文件名">
+        <el-input v-model="form.pdfName" placeholder="请输入 PDF 文件名"></el-input>
+      </el-form-item>
+      <el-form :model="form.detailList">
+        <div v-for="(item,index) in form.detailList" :key="index" class="invoice-detail">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="项目名称">
+              <el-input v-model="item.name" placeholder="请输入项目名称"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="规格型号">
+              <el-input v-model="item.model" placeholder="请输入规格型号"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="单位">
+              <el-input v-model="item.unit" placeholder="请输入单位"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="数量">
+              <el-input-number v-model="item.count" placeholder="请输入数量" :min="1"></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="单价">
+              <el-input-number v-model="item.price" placeholder="请输入单价" :min="0" :step="0.01"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="金额">
+              <el-input-number v-model="item.amount" placeholder="请输入金额" :min="0" :step="0.01"></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="税率">
+              <el-input-number v-model="item.taxRate" placeholder="请输入税率" :min="0" :step="0.01"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="税额">
+              <el-input-number v-model="item.taxAmount" placeholder="请输入税额" :min="0" :step="0.01"></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="PDF 文件名">
+              <el-input v-model="item.pdfName" placeholder="请输入 PDF 文件名"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-button type="danger" @click="removeItem(index)">删除</el-button>
+          </el-col>
+        </el-row>
+      </div>
+      </el-form>
+     
+      <el-form-item>
+        <el-button type="primary" @click="addItem">新增明细</el-button>
+      </el-form-item>
+    </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
@@ -85,13 +217,31 @@
         isProcessing: false, // 控制上传按钮的加载状态
         dialogTitle: '', // 对话框标题
         form: {
-            pdfname:'',
-          id: null,
-          title: '',
-          number: '',
-          date: '',
-          total_amount: 0,
-          tax_amount: 0
+        title: '',
+        machineNumber: '',
+        code: '',
+        number: '',
+        date: '',
+        checksum: '',
+        buyerName: '',
+        buyerCode: '',
+        buyerAddress: '',
+        buyerAccount: '',
+        password: '',
+        amount: 0,
+        taxAmount: 0,
+        totalAmountString: '',
+        totalAmount: 0,
+        sellerName: '',
+        sellerCode: '',
+        sellerAddress: '',
+        sellerAccount: '',
+        payee: '',
+        reviewer: '',
+        drawer: '',
+        type: '',
+        pdfName: '',
+        detailList: []
         }
       };
     },
@@ -99,6 +249,27 @@
       InvoiceDetailManage
     },
     methods: {
+        addItem() {
+            if(this.form.detailList ==null){
+                this.form.detailList = [];
+            }
+          this.form.detailList.push({
+            id: null,
+            name: '',
+            model: '',
+            unit: '',
+            count: 0,
+            price: 0,
+            amount: 0,
+            taxRate: 0,
+            taxAmount: 0,
+            pdfName: ''
+          });
+          this.$forceUpdate();
+        },
+        removeItem(index) {
+          this.form.detailList.splice(index, 1);
+        },
       // 获取发票列表
       async fetchInvoices() {
         try {
@@ -126,10 +297,12 @@
           if (this.form.id) {
             // 更新发票
             await axios.post('/invoice/update', this.form);
+            await axios.post('/invoice-details/update', this.form);
             this.$message.success('发票更新成功');
           } else {
             // 新增发票
             await axios.post('/invoice/save', this.form);
+            await axios.post('/invoice-details/update', this.form);
             this.$message.success('发票新增成功');
           }
           this.dialogFormVisible = false;
@@ -142,8 +315,10 @@
       // 删除发票
       async deleteInvoice(id) {
         try {
+        //    await this.$refs.invoicedetail.deleteDetailByInvoiceId(id);
+          await axios.get(`/invoice-details/invoice/del/${id}`);
           await axios.get('/invoice/del', { params: { id } });
-          this.$refs.invoicedetail.deleteDetailByInvoiceId(id);
+          
           this.$message.success('发票删除成功');
           this.fetchInvoices(); // 刷新发票列表
         } catch (error) {
@@ -169,6 +344,9 @@
         this.dialogTitle = '编辑发票';
         this.form = { ...invoice };
         this.dialogFormVisible = true;
+      },
+      resetForm() {
+      this.$refs.invoiceForm.resetFields();
       },
       // 分页事件处理
       handleSizeChange(newSize) {
