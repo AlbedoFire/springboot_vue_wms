@@ -5,11 +5,11 @@
       
       <!-- 发票列表 -->
       <el-table :data="invoices" style="width: 100%">
-        <el-table-column prop="id" label="ID"></el-table-column>
+        <!-- <el-table-column prop="id" label="ID"></el-table-column> -->
         <el-table-column prop="title" label="发票标题"></el-table-column>
         <el-table-column prop="number" label="发票号码"></el-table-column>
         <el-table-column prop="date" label="开票日期"></el-table-column>
-        <el-table-column prop="total_amount" label="总金额"></el-table-column>
+        <el-table-column prop="totalAmount" label="总金额"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
@@ -100,6 +100,7 @@
               size: this.pageSize
             }
           });
+          console.log(response.data.data);
           this.invoices = response.data.data;
           this.total = response.data.total;
         } catch (error) {

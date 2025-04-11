@@ -75,6 +75,17 @@ public class InvoiceDetailController {
 
     }
 
+    // 根据ID删除发票明细
+    @DeleteMapping("/{id}")
+    public Result deleteInvoiceDetailById(@PathVariable Integer id) {
+        boolean deleted = invoiceDetailService.removeById(id);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
+    }
+
     // 获取所有发票明细
     @GetMapping
     public Result getAllInvoiceDetails() {

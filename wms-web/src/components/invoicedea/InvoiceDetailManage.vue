@@ -5,16 +5,16 @@
       
       <!-- 发票明细列表 -->
       <el-table :data="invoiceDetails" style="width: 100%">
-        <el-table-column prop="id" label="明细ID"></el-table-column>
+        <!-- <el-table-column prop="id" label="明细ID"></el-table-column> -->
         <el-table-column prop="name" label="项目名称"></el-table-column>
         <el-table-column prop="model" label="规格型号"></el-table-column>
         <el-table-column prop="unit" label="单位"></el-table-column>
         <el-table-column prop="count" label="数量"></el-table-column>
         <el-table-column prop="price" label="单价"></el-table-column>
         <el-table-column prop="amount" label="金额"></el-table-column>
-        <el-table-column prop="tax_rate" label="税率"></el-table-column>
-        <el-table-column prop="tax_amount" label="税额"></el-table-column>
-        <el-table-column prop="pdf_name" label="pdf名字"></el-table-column>
+        <el-table-column prop="taxRate" label="税率"></el-table-column>
+        <el-table-column prop="taxAmount" label="税额"></el-table-column>
+        <el-table-column prop="pdfName" label="pdf名字"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
@@ -129,6 +129,7 @@
               size: this.pageSize
             }
           });
+          console.log(response.data.data);
           this.invoiceDetails = response.data.data;
           this.total = response.data.total;
         } catch (error) {

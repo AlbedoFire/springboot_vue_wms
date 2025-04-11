@@ -53,6 +53,39 @@ public class InvoiceController {
         }
     }
 
+    //根据ID更新发票
+    @PutMapping("/{id}")
+    public Result updateInvoice(@PathVariable Integer id, @RequestBody Invoice invoice) {
+        invoice.setId(id);
+        boolean updated = invoiceService.updateById(invoice);
+        if (updated) {
+            return Result.suc(invoice);
+        } else {
+            return Result.fail();
+        }
+    }
+
+    // 创建发票
+    @PostMapping
+    public Result createInvoice(@RequestBody Invoice invoice) {
+        boolean saved = invoiceService.save(invoice);
+        if (saved) {
+            return Result.suc(invoice);
+        } else {
+            return Result.fail();
+        }
+    }
+    //根据ID删除发票
+    @DeleteMapping("/{id}")
+    public Result deleteInvoice(@PathVariable Integer id) {
+        boolean deleted = invoiceService.removeById(id);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
+    }
+
     // 获取所有发票
     @GetMapping
     public Result getAllInvoices() {

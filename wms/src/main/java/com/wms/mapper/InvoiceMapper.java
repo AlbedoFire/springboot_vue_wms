@@ -17,4 +17,5 @@ public interface InvoiceMapper extends BaseMapper<Invoice> {
     // 在这里可以添加自定义的查询方法（如果需要）
     @Select("SELECT MAX(id) from invoice")
     Long getLastInsertId();
+    
 }
