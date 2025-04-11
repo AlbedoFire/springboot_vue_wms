@@ -153,6 +153,18 @@
           this.$message.error('删除发票明细失败');
         }
       },
+      async deleteDetailByInvoiceId(id){
+          try{
+              await axios.delete(`/invoice-details/invoice/${id}`);
+              this.$message.success('明细删除成功');
+              this.fetchInvoiceDetails(); // 刷新明细列表
+
+          }catch(error){
+              console.error('删除发票明细失败:', error);
+              this.$message.error('删除发票明细失败');
+
+          }
+      },
       // 打开新增明细表单
       openAddForm() {
         this.dialogTitle = '新增明细';

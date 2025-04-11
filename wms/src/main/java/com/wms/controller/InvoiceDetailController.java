@@ -8,6 +8,7 @@
 
 package com.wms.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.InvoiceDetail;
@@ -100,5 +101,16 @@ public class InvoiceDetailController {
         Page<InvoiceDetail> pageObj = new Page<>(page, size);
         pageObj = invoiceDetailService.page(pageObj);
         return Result.suc(pageObj.getRecords(), pageObj.getTotal());
+    }
+    @DeleteMapping("/invoice/{invoiceId}")
+    public Result deleteInvoiceDetailsByInvoiceId(@PathVariable Integer invoiceId) {
+        LambdaQueryWrapper<InvoiceDetail> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(InvoiceDetail::getInvoiceId, invoiceId);
+        boolean deleted = invoiceDetailService.remove(wrapper);
+        if (deleted) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
     }
 }

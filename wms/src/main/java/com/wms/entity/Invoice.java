@@ -90,5 +90,8 @@ public class Invoice {
     @TableField("type")
     private String type;
 
+    @TableField("pdf_name")
+    private String pdfName;
+
 
 }

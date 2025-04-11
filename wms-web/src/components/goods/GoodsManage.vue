@@ -6,12 +6,12 @@
       <!-- 发票列表 -->
       <el-table :data="invoices" style="width: 100%">
         <!-- <el-table-column prop="id" label="ID"></el-table-column> -->
-        <el-table-column prop="pdfname" label="文件名"></el-table-column>
+        <el-table-column prop="pdfName" label="文件名"></el-table-column>
         <el-table-column prop="title" label="发票标题"></el-table-column>
         <el-table-column prop="number" label="发票号码"></el-table-column>
         <el-table-column prop="date" label="开票日期"></el-table-column>
         <el-table-column prop="totalAmount" label="总金额"></el-table-column>
-        <el-table-column label="项目名称"><InvoiceDetailManage></InvoiceDetailManage></el-table-column>
+        <el-table-column label="项目名称"><InvoiceDetailManage :ref="invoicedetail"></InvoiceDetailManage></el-table-column>
         
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -143,6 +143,7 @@
       async deleteInvoice(id) {
         try {
           await axios.get('/invoice/del', { params: { id } });
+          this.$refs.invoicedetail.deleteDetailByInvoiceId(id);
           this.$message.success('发票删除成功');
           this.fetchInvoices(); // 刷新发票列表
         } catch (error) {
