@@ -163,13 +163,13 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="PDF 文件名">
               <el-input v-model="item.pdfName" placeholder="请输入 PDF 文件名"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="24">
             <el-button type="danger" @click="removeItem(index)">删除</el-button>
