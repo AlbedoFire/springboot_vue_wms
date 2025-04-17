@@ -149,6 +149,11 @@
           });
           console.log(response.data.data);
           this.invoiceDetails = response.data.data;
+          
+          this.invoiceDetails.forEach(item => {
+            item.date = item.date.replace('年', '-').replace('月', '-').replace('日', '');
+            item.date = new Date(item.date).toISOString(); // 格式化日期
+          });
           this.total = response.data.total;
         } catch (error) {
           console.error('获取发票明细列表失败:', error);
