@@ -150,9 +150,10 @@
           console.log(response.data.data);
           this.invoiceDetails = response.data.data;
           
-          this.invoiceDetails.forEach(item => {
-            item.date = item.date.replace('年', '-').replace('月', '-').replace('日', '');
-            item.date = new Date(item.date).toISOString(); // 格式化日期
+          this.invoices.forEach(invoice => {
+            invoice.date = invoice.date.replace('年', '-').replace('月', '-').replace('日', '');
+            invoice.date = new Date(invoice.date).toISOString(); // 格式化日期
+            invoice.date = invoice.date.substring(0, 10); // 只保留日期部分
           });
           this.total = response.data.total;
         } catch (error) {
