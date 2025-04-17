@@ -202,6 +202,11 @@
           });
           console.log(response.data.data);
           this.invoices = response.data.data;
+          
+          this.invoices.forEach(invoice => {
+            invoice.date = invoice.date.replace('年', '-').replace('月', '-').replace('日', '');
+            invoice.date = new Date(invoice.date).toISOString(); // 格式化日期
+          });
           this.total = response.data.total;
         } catch (error) {
           console.error('获取发票列表失败:', error);
@@ -308,6 +313,8 @@
       
       // 填充表单
       this.form = { ...invoiceData };
+      this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
+      this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
       this.dialogTitle = 'PDF识别结果';
       this.dialogFormVisible = true;
       
