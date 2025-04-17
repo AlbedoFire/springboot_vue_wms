@@ -2,6 +2,7 @@
     <div>
         <el-button type="primary" @click="openAddForm">新增发票</el-button>
       <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
+      <el-button type="primary" @click="exportTable">导出表格</el-button>
       
       <!-- 发票明细列表 -->
       <el-table :data="invoiceDetails" style="width: 100%">
@@ -86,6 +87,7 @@
   
   <script>
   import axios from '@/axiosWrapper';
+  import * as XLSX from 'xlsx';
   
   export default {
     props: {
@@ -120,6 +122,14 @@
       };
     },
     methods: {
+      exportTable() {
+      const data = this.invoiceDetails;
+      const headers = Object.keys(data[0]);
+      const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, "invoiceDetail.xlsx");
+    },
       // 获取发票明细列表
       async fetchInvoiceDetails() {
         try {
