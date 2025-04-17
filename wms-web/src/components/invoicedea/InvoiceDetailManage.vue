@@ -124,8 +124,16 @@
     methods: {
       exportTable() {
       const data = this.invoiceDetails;
-      const headers = Object.keys(data[0]);
-      const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+      let columns_to_keep = ['name', 'model', 'unit', 'count', 'price', 'amount', 'tax_rate', 'tax_amount', 'pdf_name'];
+      let filteredData = data.map(item => {
+        let newItem = {};
+        columns_to_keep.forEach(col => {
+          newItem[col] = item[col];
+        });
+        return newItem;
+      });
+      const headers = ['项目名称', '规格型号', '单位', '数量', '单价', '金额', '税率', '税额', 'pdf名字'];
+      const worksheet = XLSX.utils.json_to_sheet(filteredData, { header: headers });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
       XLSX.writeFile(workbook, "invoiceDetail.xlsx");

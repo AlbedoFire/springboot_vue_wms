@@ -177,8 +177,16 @@
     methods: {
       exportTable() {
       const data = this.invoices;
-      const headers = Object.keys(data[0]);
-      const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+      columns_to_keep = ['title','number','date','totalAmount']; // 需要保留的列
+      let filteredData = data.map(item => {
+        let newItem = {};
+        columns_to_keep.forEach(col => {
+          newItem[col] = item[col];
+        });
+        return newItem;
+      });
+      const headers = ['标题','发票号码','开票日期','总金额'];// 表头
+      const worksheet = XLSX.utils.json_to_sheet(filteredData, { header: headers });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
       XLSX.writeFile(workbook, "invoices.xlsx");
