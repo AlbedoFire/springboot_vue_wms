@@ -188,24 +188,25 @@
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
-      <<el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
-  <el-upload
-    action="#"
-    :show-file-list="false"
-    :before-upload="handleFileUpload"
-    accept="application/pdf"
-    drag
-    class="upload-dragger"
-  >
-    <i class="el-icon-upload"></i>
-    <div class="el-upload__text">
-      将文件拖到此处，或
-      <em>点击上传</em>
-    </div>
-    <el-button type="primary" :loading="isProcessing" slot="trigger">点击上传</el-button>
-    <div slot="tip" class="el-upload__tip">只能上传PDF文件，且不超过10MB</div>
-  </el-upload>
-</el-dialog>
+
+      <el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
+        <el-upload
+          action="#"
+          :show-file-list="false"
+          :before-upload="handleFileUpload"
+          accept="application/pdf"
+          drag
+          class="upload-dragger"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+          <el-button type="primary" :loading="isProcessing" slot="trigger">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传PDF文件，且不超过10MB</div>
+        </el-upload>
+      </el-dialog>
     </div>
   </template>
   

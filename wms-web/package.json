@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "core-js": "^3.6.5",
+    "core-js": "^3.41.0",
     "element-ui": "^2.15.9",
     "file-saver": "^2.0.5",
     "pdf-lib": "^1.17.1",

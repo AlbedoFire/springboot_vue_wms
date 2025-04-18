@@ -3,9 +3,32 @@
       <el-button type="primary" @click="openAddForm">新增发票</el-button>
       <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
       <el-button type="primary" @click="exportTable">导出表格</el-button>
+
+      <!-- 查询表单 -->
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+      <el-form-item label="发票标题">
+        <el-input v-model="searchForm.title" placeholder="请输入发票标题"></el-input>
+      </el-form-item>
+      <el-form-item label="发票号码">
+        <el-input v-model="searchForm.number" placeholder="请输入发票号码"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="开票日期">
+        <el-date-picker
+          v-model="searchForm.date"
+          type="date"
+          placeholder="选择开票日期"
+
+      
+        ></el-date-picker>
+      </el-form-item> -->
+      <el-form-item>
+        <el-button type="primary" @click="search">查询</el-button>
+        <el-button @click="resetSearch">重置</el-button>
+      </el-form-item>
+    </el-form>
       
       <!-- 发票列表 -->
-      <el-table :data="invoices" style="width: 100%">
+      <el-table :data="filteredInvoices" style="width: 100%">
         <!-- <el-table-column prop="id" label="ID"></el-table-column> -->
         <el-table-column prop="title" label="发票标题"></el-table-column>
         <el-table-column prop="number" label="发票号码"></el-table-column>
@@ -133,6 +156,7 @@
   
   <script>
   import axios from '@/axiosWrapper';
+
   import * as XLSX from 'xlsx';
   
   export default {
@@ -171,13 +195,61 @@
         drawer: '',
         type: '',
         pdfName: ''
-      }
+      },
+        searchForm: {
+          title: '',
+          number: '',
+          date: ''
+        },
+        filteredInvoices: [], // 过滤后的发票列表
       };
     },
     methods: {
+      // 查询方法
+    search() {
+      let result = [...this.invoices];
+      
+      // 根据发票标题筛选
+      if (this.searchForm.title) {
+        result = result.filter(invoice => 
+          invoice.title && invoice.title.includes(this.searchForm.title)
+        );
+      }
+      
+      // 根据发票号码筛选
+      if (this.searchForm.number) {
+        result = result.filter(invoice => 
+          invoice.number && invoice.number.includes(this.searchForm.number)
+        );
+      }
+      
+      // 根据开票日期筛选
+      console.log(`this.searchForm.date`, this.searchForm.date);
+      if (this.searchForm.date) {
+        result = result.filter(invoice => {
+        console.log(`invoice.date`, invoice.date)
+          
+          this.searchForm.date = this.searchForm.date.toISOString().substring(0, 10); // 格式化日期
+          this.searchForm.date = this.searchForm.date.replace('年', '-').replace('月', '-').replace('日', '');
+          return invoice.date && invoice.date.includes(this.searchForm.date);
+        });
+      }
+      
+      // 更新显示的数据
+      this.filteredInvoices = result;
+    },
+    // 重置查询
+    resetSearch() {
+      this.searchForm = {
+        title: '',
+        number: '',
+        date: ''
+      };
+      this.filteredInvoices = [...this.invoices]; // 重置为原始数据
+    },
       exportTable() {
       const data = this.invoices;
-      columns_to_keep = ['title','number','date','totalAmount']; // 需要保留的列
+      let columns_to_keep = ['title','number','date','totalAmount']; // 需要保留的列
       let filteredData = data.map(item => {
         let newItem = {};
         columns_to_keep.forEach(col => {
@@ -203,11 +275,13 @@
           console.log(response.data.data);
           this.invoices = response.data.data;
           
+          
           this.invoices.forEach(invoice => {
             invoice.date = invoice.date.replace('年', '-').replace('月', '-').replace('日', '');
             invoice.date = new Date(invoice.date).toISOString(); // 格式化日期
             invoice.date = invoice.date.substring(0, 10); // 只保留日期部分
           });
+          this.filteredInvoices = this.invoices; // 初始化过滤后的发票列表
           this.total = response.data.total;
         } catch (error) {
           console.error('获取发票列表失败:', error);

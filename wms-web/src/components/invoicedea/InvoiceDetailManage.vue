@@ -3,9 +3,41 @@
         <el-button type="primary" @click="openAddForm">新增发票</el-button>
       <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
       <el-button type="primary" @click="exportTable">导出表格</el-button>
+
+      <!-- 查询筛选表单 -->
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+      <el-form-item label="项目名称">
+        <el-input v-model="searchForm.name" placeholder="请输入项目名称"></el-input>
+      </el-form-item>
+      <el-form-item label="规格型号">
+        <el-input v-model="searchForm.model" placeholder="请输入规格型号"></el-input>
+      </el-form-item>
+      <el-form-item label="单位">
+        <el-select v-model="searchForm.unit" placeholder="请选择单位">
+          <el-option label="个" value="个"></el-option>
+          <el-option label="箱" value="箱"></el-option>
+          <el-option label="件" value="件"></el-option>
+          <el-option label="套" value="套"></el-option>
+          <el-option label="台" value="台"></el-option>
+          <el-option label="吨" value="吨"></el-option>
+          <el-option label="米" value="米"></el-option>
+          <el-option label="厘米" value="厘米"></el-option>
+          <el-option label="千克" value="千克"></el-option>
+          <el-option label="升" value="升"></el-option>
+          <el-option label="毫升" value="毫升"></el-option>
+          <el-option label="平方" value="平方"></el-option>
+          <el-option label="立方" value="立方"></el-option>
+          <el-option label="包" value="包"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="search">查询</el-button>
+        <el-button @click="resetSearch">重置</el-button>
+      </el-form-item>
+    </el-form>
       
       <!-- 发票明细列表 -->
-      <el-table :data="invoiceDetails" style="width: 100%">
+      <el-table :data="filterinvoiceDetails" style="width: 100%">
         <!-- <el-table-column prop="id" label="明细ID"></el-table-column> -->
         <el-table-column prop="name" label="项目名称"></el-table-column>
         <el-table-column prop="model" label="规格型号"></el-table-column>
@@ -99,6 +131,7 @@
     data() {
       return {
         invoiceDetails: [], // 发票明细列表
+        filterinvoiceDetails: [], // 筛选后的发票明细列表
         currentPage: 1, // 当前页码
         pageSize: 10, // 每页显示条数
         total: 0, // 总记录数
@@ -118,13 +151,57 @@
           tax_amount: 0,
           pdf_name: ''
         
-        }
+        },
+        searchForm: {
+        name: '',
+        model: '',
+        unit: ''
+      },
       };
     },
     methods: {
+      search() {
+      // 复制原始数据
+      let result = [...this.invoiceDetails];
+      
+      // 根据项目名称筛选
+      if (this.searchForm.name) {
+        const nameKeyword = this.searchForm.name.toLowerCase();
+        result = result.filter(item => 
+          item.name.toLowerCase().includes(nameKeyword)
+        );
+      }
+      
+      // 根据规格型号筛选
+      if (this.searchForm.model) {
+        const modelKeyword = this.searchForm.model.toLowerCase();
+        result = result.filter(item => 
+          item.model.toLowerCase().includes(modelKeyword)
+        );
+      }
+      
+      // 根据单位筛选
+      if (this.searchForm.unit) {
+        result = result.filter(item => 
+          item.unit === this.searchForm.unit
+        );
+      }
+      
+      // 更新显示的数据
+      this.filterinvoiceDetails = result;
+    },
+    // 重置查询
+    resetSearch() {
+      this.searchForm = {
+        name: '',
+        model:'',
+        unit: ''
+      };
+      this.filteredDetails = this.originalDetails;
+    },
       exportTable() {
-      const data = this.invoiceDetails;
-      let columns_to_keep = ['name', 'model', 'unit', 'count', 'price', 'amount', 'tax_rate', 'tax_amount', 'pdf_name'];
+      const data = this.filterinvoiceDetails;
+      let columns_to_keep = ['name', 'model', 'unit', 'count', 'price', 'amount', 'tax_rate', 'tax_amount'];
       let filteredData = data.map(item => {
         let newItem = {};
         columns_to_keep.forEach(col => {
@@ -132,7 +209,7 @@
         });
         return newItem;
       });
-      const headers = ['项目名称', '规格型号', '单位', '数量', '单价', '金额', '税率', '税额', 'pdf名字'];
+      const headers = ['项目名称', '规格型号', '单位', '数量', '单价', '金额', '税率', '税额'];
       const worksheet = XLSX.utils.json_to_sheet(filteredData, { header: headers });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
@@ -149,6 +226,7 @@
           });
           console.log(response.data.data);
           this.invoiceDetails = response.data.data;
+          this.filterinvoiceDetails = response.data.data; // 将获取的发票明细列表赋值给筛选后的列表
           
           // this.invoices.forEach(invoice => {
           //   invoice.date = invoice.date.replace('年', '-').replace('月', '-').replace('日', '');
