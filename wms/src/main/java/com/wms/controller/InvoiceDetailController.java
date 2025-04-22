@@ -113,6 +113,13 @@ public class InvoiceDetailController {
             return Result.fail();
         }
     }
+    @GetMapping("/invoice/{invoiceId}")
+    public Result getInvoiceDetailsByInvoiceId(@PathVariable Integer invoiceId){
+        LambdaQueryWrapper<InvoiceDetail> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(InvoiceDetail::getInvoiceId, invoiceId);
+        List<InvoiceDetail> invoiceDetails = invoiceDetailService.selectInvoicDetailsByinvoiceId(invoiceId);
+        return Result.suc(invoiceDetails,(long)invoiceDetails.size());
+    }
     @GetMapping("/invoice/del/{invoiceId}")
     public Result delByInvoiceId(@PathVariable Integer invoiceId){
         LambdaQueryWrapper<InvoiceDetail> wrapper = new LambdaQueryWrapper<>();

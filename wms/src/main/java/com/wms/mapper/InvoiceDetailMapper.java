@@ -12,8 +12,14 @@ package com.wms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wms.entity.InvoiceDetail;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface InvoiceDetailMapper extends BaseMapper<InvoiceDetail> {
     // 在这里可以添加自定义的查询方法（如果需要）
+    @Select("select * from invoice_detail where #{invoiceId}")
+    List<InvoiceDetail> selectByInvoiceIdInvoiceDetailList(@Param("invoiceId") Integer invoice_id);
 }

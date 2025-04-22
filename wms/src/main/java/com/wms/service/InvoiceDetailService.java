@@ -11,5 +11,8 @@ package com.wms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.entity.InvoiceDetail;
 
+import java.util.List;
+
 public interface InvoiceDetailService extends IService<InvoiceDetail> {
+    public List<InvoiceDetail> selectInvoicDetailsByinvoiceId(Integer id);
 }

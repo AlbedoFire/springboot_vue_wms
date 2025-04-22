@@ -12,8 +12,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.entity.InvoiceDetail;
 import com.wms.mapper.InvoiceDetailMapper;
 import com.wms.service.InvoiceDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class InvoiceDetailServiceImpl extends ServiceImpl<InvoiceDetailMapper, InvoiceDetail> implements InvoiceDetailService {
+    @Autowired
+    private InvoiceDetailMapper invoiceDetailMapper;
+    public List<InvoiceDetail> selectInvoicDetailsByinvoiceId(Integer id){
+        return invoiceDetailMapper.selectByInvoiceIdInvoiceDetailList(id);
+    }
 }

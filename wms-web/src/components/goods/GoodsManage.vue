@@ -362,11 +362,16 @@
         this.dialogFormVisible = true;
       },
       // 打开编辑发票表单
-      openEditForm(invoice) {
+      async openEditForm(invoice) {
         this.dialogTitle = '编辑发票';
         this.form = { ...invoice };
-        this.form.detailList  = axios.get(`/invoice-details/${invoice.id}`);
+        try{
+        let response = await axios.get(`/invoice-details/invoice/${invoice.id}`);
+        this.form.detailList  = response.data.data;
         this.dialogFormVisible = true;
+        }catch (error){
+          console.error(error)
+        }
       },
       resetForm() {
       this.$refs.invoiceForm.resetFields();
