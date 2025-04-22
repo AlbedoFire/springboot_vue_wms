@@ -259,9 +259,7 @@
     },
     methods: {
         addItem() {
-            if(this.form.detailList ==null){
-                this.form.detailList = [];
-            }
+            this.form.detailList = []
           this.form.detailList.push({
             id: null,
             name: '',
