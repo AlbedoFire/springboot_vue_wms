@@ -20,6 +20,6 @@ import java.util.List;
 @Mapper
 public interface InvoiceDetailMapper extends BaseMapper<InvoiceDetail> {
     // 在这里可以添加自定义的查询方法（如果需要）
-    @Select("select * from invoice_detail where #{invoiceId}")
+    @Select("select * from invoice_detail where invoice_id = #{invoiceId}")
     List<InvoiceDetail> selectByInvoiceIdInvoiceDetailList(@Param("invoiceId") Integer invoice_id);
 }

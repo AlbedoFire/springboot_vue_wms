@@ -106,6 +106,17 @@
       };
     },
     methods: {
+      async fetchInvoiceDetailsByInvoiceId() {
+        try {
+          const response = await axios.get(`/invoice-details/invoice/${this.invoiceId}`);
+          console.log(response.data.data);
+          this.invoiceDetails = response.data.data;
+          this.total = response.data.total;
+        } catch (error) {
+          console.error('获取发票明细列表失败:', error);
+          this.$message.error('获取发票明细列表失败');
+        }
+      },
       // 获取发票明细列表
       async fetchInvoiceDetails() {
         try {
@@ -204,7 +215,7 @@
       }
     },
     created() {
-      this.fetchInvoiceDetails(); // 页面加载时获取发票明细列表
+      this.fetchInvoiceDetailsByInvoiceId(); // 获取发票明细列表
     }
   };
   </script>

@@ -11,7 +11,12 @@
         <el-table-column prop="number" label="发票号码"></el-table-column>
         <el-table-column prop="date" label="开票日期"></el-table-column>
         <el-table-column prop="totalAmount" label="总金额"></el-table-column>
-        <el-table-column label="项目名称"><InvoiceDetailManage :ref="invoicedetail"></InvoiceDetailManage></el-table-column>
+        <el-table-column label="项目名称">
+          <template slot-scope="scope">
+            <InvoiceDetailManage :ref="invoicedetail" :invoiceId="scope.row.id"></InvoiceDetailManage>
+          </template>
+          
+        </el-table-column>
         
         <el-table-column label="操作">
           <template slot-scope="scope">
