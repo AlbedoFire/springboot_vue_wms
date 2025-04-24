@@ -11,6 +11,7 @@ package com.wms.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.Result;
 import com.wms.entity.Invoice;
+import com.wms.entity.Invoices;
 import com.wms.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -108,5 +109,17 @@ public class InvoiceController {
             return Result.fail();
         }
         return Result.suc(lastInsertId,1L);
+    }
+    @GetMapping("/updateStatus/{id}")
+    public Result updateStatus(@PathVariable Integer id) {
+        Invoice invoice = new Invoice();
+        invoice.setId(id);
+        invoice.setStatus("以报销");
+        boolean updated = invoiceService.updateById(invoice);
+        if (updated) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
     }
 }

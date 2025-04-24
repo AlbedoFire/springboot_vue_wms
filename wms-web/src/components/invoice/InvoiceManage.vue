@@ -34,10 +34,14 @@
         <el-table-column prop="number" label="发票号码"></el-table-column>
         <el-table-column prop="date" label="开票日期"></el-table-column>
         <el-table-column prop="totalAmount" label="总金额"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="pdfName" label="PDF文件名"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -134,6 +138,9 @@
       <el-form-item label="PDF 文件名">
         <el-input v-model="form.pdfName" placeholder="请输入 PDF 文件名"></el-input>
       </el-form-item>
+      <el-form-item label="状态">
+        <el-input v-model="form.status" placeholder="请输入状态"></el-input>
+      </el-form-item>
     </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -194,7 +201,8 @@
         reviewer: '',
         drawer: '',
         type: '',
-        pdfName: ''
+        pdfName: '',
+        status: 0,
       },
         searchForm: {
           title: '',
@@ -205,7 +213,16 @@
       };
     },
     methods: {
-      // 查询方法
+      async updateStatus(id){
+        try {
+          await axios.get(`/invoice/updateStatus/${id}`);
+          this.$message.success('发票状态更新成功');
+          this.fetchInvoices(); // 刷新发票列表
+        } catch (error) {
+          console.error('更新发票状态失败:', error);
+          this.$message.error('更新发票状态失败');
+        }
+      },      // 查询方法
     search() {
       let result = [...this.invoices];
       

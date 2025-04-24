@@ -96,5 +96,16 @@ public class InvoicesController {
         // 封装结果
         return Result.suc(pageObj.getRecords(), pageObj.getTotal());
     }
-
+    @GetMapping("/updateStatus/{id}")
+    public Result updateStatus(@RequestParam Integer id) {
+        Invoices invoices = new Invoices();
+        invoices.setInvoiceId(id);
+        invoices.setStatus("以报销");
+        boolean updated = invoicesService.updateById(invoices);
+        if (updated) {
+            return Result.suc();
+        } else {
+            return Result.fail();
+        }
+    }
 }

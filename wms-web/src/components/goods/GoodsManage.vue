@@ -11,6 +11,8 @@
         <el-table-column prop="number" label="发票号码"></el-table-column>
         <el-table-column prop="date" label="开票日期"></el-table-column>
         <el-table-column prop="totalAmount" label="总金额"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column label="项目名称">
           <template slot-scope="scope">
             <InvoiceDetailManage :ref="invoicedetail" :invoiceId="scope.row.id"></InvoiceDetailManage>
@@ -22,6 +24,7 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -117,6 +120,9 @@
       </el-form-item>
       <el-form-item label="PDF 文件名">
         <el-input v-model="form.pdfName" placeholder="请输入 PDF 文件名"></el-input>
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-input v-model="form.status" placeholder="请输入状态"></el-input>
       </el-form-item>
       <el-form :model="form.detailList">
         <div v-for="(item,index) in form.detailList" :key="index" class="invoice-detail">
@@ -255,6 +261,7 @@
         drawer: '',
         type: '',
         pdfName: '',
+        status: 0,
         detailList: []
         }
       };
@@ -263,6 +270,16 @@
       InvoiceDetailManage
     },
     methods: {
+      async updateStatus(id){
+        try {
+          await axios.get(`/invoice/updateStatus/${id}`);
+          this.$message.success('发票状态更新成功');
+          this.fetchInvoices(); // 刷新发票列表
+        } catch (error) {
+          console.error('更新发票状态失败:', error);
+          this.$message.error('更新发票状态失败');
+        }
+      },
         addItem() {
             this.form.detailList = []
           this.form.detailList.push({
