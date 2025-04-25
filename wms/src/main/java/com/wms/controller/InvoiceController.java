@@ -114,7 +114,7 @@ public class InvoiceController {
     public Result updateStatus(@PathVariable Integer id) {
         Invoice invoice = new Invoice();
         invoice.setId(id);
-        invoice.setStatus("以报销");
+        invoice.setStatus("已报销");
         boolean updated = invoiceService.updateById(invoice);
         if (updated) {
             return Result.suc();

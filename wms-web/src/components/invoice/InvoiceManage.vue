@@ -21,6 +21,14 @@
       
         ></el-date-picker>
       </el-form-item> -->
+      <el-form-item label="发票类型">
+        <el-select v-model="searchForm.type" placeholder="请选择发票类型">
+          <el-option label="普通发票" value="普通发票"></el-option>
+          <el-option label="增值税普通发票" value="增值税普通发票"></el-option>
+          <el-option label="增值税专用发票" value="增值税专用发票"></el-option>
+          <el-option label="电子发票" value="电子发票"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search">查询</el-button>
         <el-button @click="resetSearch">重置</el-button>
@@ -41,7 +49,9 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
+            <div v-if="scope.row.status !='已报销' ">
             <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -250,6 +260,13 @@
           this.searchForm.date = this.searchForm.date.replace('年', '-').replace('月', '-').replace('日', '');
           return invoice.date && invoice.date.includes(this.searchForm.date);
         });
+      }
+
+      // 根据发票类型筛选
+      if (this.searchForm.type) {
+        result = result.filter(invoice => 
+          invoice.type && invoice.type.includes(this.searchForm.type)
+        );
       }
       
       // 更新显示的数据

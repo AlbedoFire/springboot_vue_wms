@@ -24,7 +24,9 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
+            <div v-if="scope.row.status != '已报销'">
             <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
