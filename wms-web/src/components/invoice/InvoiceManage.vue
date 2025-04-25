@@ -3,6 +3,7 @@
       <el-button type="primary" @click="openAddForm">新增发票</el-button>
       <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
       <el-button type="primary" @click="exportTable">导出表格</el-button>
+      <el-button type="primary" @click="batchReimburse">一起报销</el-button>
 
       <!-- 查询表单 -->
     <el-form :inline="true" :model="searchForm" class="demo-form-inline">
@@ -36,7 +37,8 @@
     </el-form>
       
       <!-- 发票列表 -->
-      <el-table :data="filteredInvoices" style="width: 100%">
+      <el-table :data="filteredInvoices" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
         <!-- <el-table-column prop="id" label="ID"></el-table-column> -->
         <el-table-column prop="title" label="发票标题"></el-table-column>
         <el-table-column prop="number" label="发票号码"></el-table-column>
@@ -223,6 +225,27 @@
       };
     },
     methods: {
+      handleSelectionChange(val) {
+      this.selectedRows = val // 更新选中的行
+    },
+    // 批量报销操作
+    batchReimburse() {
+      if (this.selectedRows.length > 0) {
+        // 示例：弹出选中的发票编号
+        const invoiceNumbers = this.selectedRows.map(row => row.invoiceNumber).join(', ')
+        this.$message.success(`选中的发票编号: ${invoiceNumbers}`)
+        // 在实际业务中，可以在这里调用后端 API 进行批量报销
+        this.selectedRows.forEach(row => {
+          this.updateStatus(row.id).then(()=>{
+            this.$message.success(`发票 ${row.invoiceNumber} 状态更新成功`)
+          }).catch(()=>{
+            this.$message.error(`发票 ${row.invoiceNumber} 状态更新失败`)
+          }); // 更新每一条发票的状态
+        });
+      } else {
+        this.$message.warning('请先选择至少一条发票记录')
+      }
+    },
       async updateStatus(id){
         try {
           await axios.get(`/invoice/updateStatus/${id}`);
