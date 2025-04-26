@@ -24,10 +24,10 @@
       </el-form-item> -->
       <el-form-item label="发票类型">
         <el-select v-model="searchForm.type" placeholder="请选择发票类型">
-          <el-option label="普通发票" value="普通发票"></el-option>
-          <el-option label="增值税普通发票" value="增值税普通发票"></el-option>
-          <el-option label="增值税专用发票" value="增值税专用发票"></el-option>
-          <el-option label="电子发票" value="电子发票"></el-option>
+          <el-option label="材料" value="材料"></el-option>
+          <el-option label="加工" value="加工"></el-option>
+          <el-option label="车票" value="车票"></el-option>
+          <el-option label="住宿" value="住宿"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -347,19 +347,21 @@
       },
       // 新增或更新发票
       async saveInvoice() {
-        let invoiceId = await axios.get('/invoice/lastInvoiceId');
-        if(invoiceId.data == null) {
-          invoiceId.data = 0;
-        }
         try {
           if (this.form.id) {
             this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
             this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             // 更新发票
             await axios.post('/invoice/update', this.form);
+            let invoiceId = await axios.get('/invoice/lastInsertId');
+            if(invoiceId.data.data == null) {
+              invoiceId = 0;
+            }else {
+              invoiceId = invoiceId.data.data;
+            }
             for(let i = 0; i < this.form.detailList.length; i++) {
-              this.form.detailList[i].invoiceId = invoiceId.data;
-                await axios.post('/invoice-details/save', this.form.detailList[i]);
+              this.form.detailList[i].invoiceId = invoiceId;
+                await axios.post('/invoice-details/update', this.form.detailList[i]);
             }
             
             this.$message.success('发票更新成功');
@@ -368,8 +370,15 @@
             this.form.date = this.form.date.replace('年', '-').replace('月', '-').replace('日', '');
             this.form.date = new Date(this.form.date).toISOString(); // 格式化日期
             await axios.post('/invoice/save', this.form);
+            await axios.post('/invoice/update', this.form);
+            let invoiceId = await axios.get('/invoice/lastInsertId');
+            if(invoiceId.data.data == null) {
+              invoiceId = 0;
+            }else {
+              invoiceId = invoiceId.data.data;
+            }
             for(let i = 0; i < this.form.detailList.length; i++) {
-              this.form.detailList[i].invoiceId = this.form.id;
+              this.form.detailList[i].invoiceId = invoiceId;
                 await axios.post('/invoice-details/save', this.form.detailList[i]);
             }
             this.$message.success('发票新增成功');
