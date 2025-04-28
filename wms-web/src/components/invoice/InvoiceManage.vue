@@ -359,10 +359,10 @@
             }else {
               invoiceId = invoiceId.data.data;
             }
-            for(let i = 0; i < this.form.detailList.length; i++) {
-              this.form.detailList[i].invoiceId = invoiceId;
-                await axios.post('/invoice-details/update', this.form.detailList[i]);
-            }
+            // for(let i = 0; i < this.form.detailList.length; i++) {
+            //   this.form.detailList[i].invoiceId = invoiceId;
+            //     await axios.post('/invoice-details/update', this.form.detailList[i]);
+            // }
             
             this.$message.success('发票更新成功');
           } else {
@@ -377,10 +377,10 @@
             }else {
               invoiceId = invoiceId.data.data;
             }
-            for(let i = 0; i < this.form.detailList.length; i++) {
-              this.form.detailList[i].invoiceId = invoiceId;
-                await axios.post('/invoice-details/save', this.form.detailList[i]);
-            }
+            // for(let i = 0; i < this.form.detailList.length; i++) {
+            //   this.form.detailList[i].invoiceId = invoiceId;
+            //     await axios.post('/invoice-details/save', this.form.detailList[i]);
+            // }
             this.$message.success('发票新增成功');
           }
           this.dialogFormVisible = false;

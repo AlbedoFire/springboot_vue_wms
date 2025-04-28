@@ -273,6 +273,7 @@
     },
     methods: {
       async updateStatus(id){
+        
         try {
           await axios.get(`/invoice/updateStatus/${id}`);
           this.$message.success('发票状态更新成功');
