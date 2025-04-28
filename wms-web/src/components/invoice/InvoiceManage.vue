@@ -160,6 +160,9 @@
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
+      <el-dialog :title="报销发票检查" :visible.sync="dialogCheckVisible">
+        <InvoiceDetailManageall :invoiceId="openid"/>
+      </el-dialog>
       <el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
         <el-upload
           action="#"
@@ -175,12 +178,20 @@
   
   <script>
   import axios from '@/axiosWrapper';
+  import InvoiceDetailManageall from '../../comm/InvoiceDetailManageall.vue';
 
   import * as XLSX from 'xlsx';
+
   
   export default {
+    name: 'InvoiceManage',
+    components: {
+      InvoiceDetailManageall
+    },
     data() {
       return {
+        openid:0,
+        dialogCheckVisible: false,
         invoices: [], // 发票列表
         currentPage: 1, // 当前页码
         pageSize: 10, // 每页显示条数
@@ -247,6 +258,8 @@
       }
     },
       async updateStatus(id){
+        this.dialogCheckVisible = true;
+        this.openid = id;
         try {
           await axios.get(`/invoice/updateStatus/${id}`);
           this.$message.success('发票状态更新成功');
