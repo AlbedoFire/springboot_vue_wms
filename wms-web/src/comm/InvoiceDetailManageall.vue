@@ -12,7 +12,7 @@
         <el-table-column prop="amount" label="金额"></el-table-column>
         <el-table-column prop="taxRate" label="税率"></el-table-column>
         <el-table-column prop="taxAmount" label="税额"></el-table-column>
-        <el-table-column prop="pdfName" label="pdf名字"></el-table-column>
+        <!-- <el-table-column prop="pdfName" label="pdf名字"></el-table-column> -->
         <!-- <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
