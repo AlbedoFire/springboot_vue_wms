@@ -1,5 +1,6 @@
 <template>
     <div>
+      <el-button size="mini" type="danger" @click="updateStatus(invoiceId)">确定</el-button>
       <!-- <el-button type="primary" @click="openAddForm">新增发票</el-button> -->
       <!-- 发票明细列表 -->
       <el-table :data="invoiceDetails" style="width: 100%" :show-header="true">
@@ -106,6 +107,17 @@
       };
     },
     methods: {
+      async updateStatus(id){
+        
+        try {
+          await axios.get(`/invoice/updateStatus/${id}`);
+          this.$message.success('发票状态更新成功');
+          this.fetchInvoiceDetails(); // 刷新发票列表
+        } catch (error) {
+          console.error('更新发票状态失败:', error);
+          this.$message.error('更新发票状态失败');
+        }
+      }, 
       async fetchInvoiceDetailsByInvoiceId() {
         try {
           const response = await axios.get(`/invoice-details/invoice/${this.invoiceId}`);

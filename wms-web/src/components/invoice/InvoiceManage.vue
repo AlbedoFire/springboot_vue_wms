@@ -52,7 +52,7 @@
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
             <div v-if="scope.row.status !='已报销' ">
-            <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
+            <el-button size="mini" type="success" @click="checkInvoice(scope.row.id)">报销</el-button>
             </div>
           </template>
         </el-table-column>
@@ -257,9 +257,12 @@
         this.$message.warning('请先选择至少一条发票记录')
       }
     },
-      async updateStatus(id){
-        this.dialogCheckVisible = true;
+    async checkInvoice(id) {
+      this.dialogCheckVisible = true;
         this.openid = id;
+    },
+      async updateStatus(id){
+        
         try {
           await axios.get(`/invoice/updateStatus/${id}`);
           this.$message.success('发票状态更新成功');
