@@ -1,6 +1,6 @@
 <template>
     <div>
-      <el-button size="mini" type="danger" @click="updateStatus(invoiceId)">确定</el-button>
+      
       <!-- <el-button type="primary" @click="openAddForm">新增发票</el-button> -->
       <!-- 发票明细列表 -->
       <el-table :data="invoiceDetails" style="width: 100%" :show-header="true">
@@ -20,8 +20,11 @@
             <el-button size="mini" type="danger" @click="deleteDetail(scope.row.id)">删除</el-button>
           </template>
         </el-table-column> -->
+        
       </el-table>
-  
+      <div style="text-align: right;">
+          <el-button type="primary" @click="updateStatus">确定</el-button> 
+        </div>
       <!-- 分页 -->
       <!-- <el-pagination
         @size-change="handleSizeChange"
@@ -113,6 +116,7 @@
           await axios.get(`/invoice/updateStatus/${id}`);
           this.$message.success('发票状态更新成功');
           this.fetchInvoiceDetails(); // 刷新发票列表
+          this.$emit('updateStatus', id); // 触发父组件事件
         } catch (error) {
           console.error('更新发票状态失败:', error);
           this.$message.error('更新发票状态失败');

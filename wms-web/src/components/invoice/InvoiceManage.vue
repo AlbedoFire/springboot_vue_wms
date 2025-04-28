@@ -160,8 +160,8 @@
           <el-button type="primary" @click="saveInvoice">保存</el-button>
         </div>
       </el-dialog>
-      <el-dialog :title="报销发票检查" :visible.sync="dialogCheckVisible">
-        <InvoiceDetailManageall :invoiceId="openid"/>
+      <el-dialog :title="报销发票检查" :visible.sync="dialogCheckVisible" width="60%">
+        <InvoiceDetailManageall :invoiceId="openid" @update="updateStatus"/>
       </el-dialog>
       <el-dialog title="PDF识别上传" :visible.sync="uploadDialogVisible">
         <el-upload
