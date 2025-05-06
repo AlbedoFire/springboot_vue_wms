@@ -97,7 +97,7 @@ public class UserController {
     //查询（模糊、匹配）
     @PostMapping("/listP")
     public Result listP(@RequestBody User user){
-        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if(StringUtils.isNotBlank(user.getName())){
             lambdaQueryWrapper.like(User::getName,user.getName());
         }

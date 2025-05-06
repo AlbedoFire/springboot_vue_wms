@@ -1,6 +1,7 @@
 import vue from 'vue'
 import Vuex from 'vuex'
 import router,{resetRouter} from "../router";
+
 vue.use(Vuex)
 
 export function addNewRoute(menuList) {
@@ -30,18 +31,25 @@ export function addNewRoute(menuList) {
 
 export default new Vuex.Store({
     state: {
-        menu: []
+        menu: [],
+        currentuser:""
     },
     mutations: {
         setMenu(state,menuList) {
             state.menu = menuList
 
             addNewRoute(menuList)
+        },
+        setCurrentUser(state,user) {
+            state.currentuser = user
         }
     },
     getters: {
         getMenu(state) {
             return state.menu
+        },
+        getCurrentUser(state) {
+            return state.currentuser
         }
     }
 })

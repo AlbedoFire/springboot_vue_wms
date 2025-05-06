@@ -58,7 +58,17 @@
 
                                 console.log(res.data.menu)
                                 sessionStorage.setItem("CurMenu",JSON.stringify(res.data.menu))
-                                this.$store.commit("setMenu",res.data.menu)
+                                if(res.data.user.role_id!=0){
+                                    let menu = res.data.menu;
+                                    
+                                    //存储菜单
+                                    this.$store.commit("setMenu",menu.slice(2));
+                                }else{
+                                    //存储菜单
+                                    this.$store.commit("setMenu",res.data.menu);
+                                }
+                                
+                                this.$store.commit("setUser",res.data.user)
                                 //跳转到主页
                                 this.$router.replace('/Index');
                             }else{
