@@ -1,3 +1,4 @@
 /wms/target/*
 .idea/*
 /.idea/compiler.xml
+/out/
