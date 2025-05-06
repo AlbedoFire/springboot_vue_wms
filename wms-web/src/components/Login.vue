@@ -58,7 +58,7 @@
 
                                 console.log(res.data.menu)
                                 sessionStorage.setItem("CurMenu",JSON.stringify(res.data.menu))
-                                if(res.data.user.role_id!=0){
+                                if(res.data.user.roleId!=0){
                                     let menu = res.data.menu;
                                     
                                     //存储菜单

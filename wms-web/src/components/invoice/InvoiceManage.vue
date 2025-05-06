@@ -3,7 +3,10 @@
       <el-button type="primary" @click="openAddForm">新增发票</el-button>
       <el-button type="success" @click="openUploadDialog">PDF识别上传</el-button>
       <el-button type="primary" @click="exportTable">导出表格</el-button>
-      <el-button type="primary" @click="batchReimburse">一起报销</el-button>
+      <div v-if="isAdmin()">
+        <el-button type="primary" @click="batchReimburse">一起报销</el-button>
+      </div>
+      
 
       <!-- 查询表单 -->
     <el-form :inline="true" :model="searchForm" class="demo-form-inline">
@@ -53,9 +56,12 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
-            <div v-if="scope.row.status !='已报销' ">
-            <el-button size="mini" type="success" @click="checkInvoice(scope.row.id)">报销</el-button>
+            <div v-if="isAdmin()">
+              <div v-if="scope.row.status !='已报销' ">
+                <el-button size="mini" type="success" @click="checkInvoice(scope.row.id)">报销</el-button>
+              </div>
             </div>
+            
           </template>
         </el-table-column>
       </el-table>
@@ -192,6 +198,7 @@
     },
     data() {
       return {
+        
         openid:0,
         dialogCheckVisible: false,
         invoices: [], // 发票列表
@@ -238,6 +245,13 @@
       };
     },
     methods: {
+      
+      isAdmin() {
+
+        const user = JSON.parse(sessionStorage.getItem('CurUser'));
+        console.log("setAdmin"+user);
+         return user && user.roleId === 0; // 假设管理员的角色ID为0
+      },
       handleSelectionChange(val) {
       this.selectedRows = val // 更新选中的行
     },
@@ -493,7 +507,7 @@
   }
     },
     created() {
-      this.fetchInvoices(); // 页面加载时获取发票列表
+      this.fetchInvoices();
     }
   };
   </script>

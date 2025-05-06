@@ -24,9 +24,12 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="deleteInvoice(scope.row.id)">删除</el-button>
-            <div v-if="scope.row.status != '已报销'">
-            <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
+            <div v-if="isAdmin">
+              <div v-if="scope.row.status != '已报销'">
+                 <el-button size="mini" type="success" @click="updateStatus(scope.row.id)">报销</el-button>
+              </div>
             </div>
+            
           </template>
         </el-table-column>
       </el-table>
@@ -226,6 +229,7 @@
   <script>
   import axios from '@/axiosWrapper';
   import InvoiceDetailManage from '../../comm/InvoiceDetailManage.vue';
+
   
   export default {
     data() {
@@ -264,7 +268,7 @@
         type: '',
         pdfName: '',
         status: 0,
-        detailList: []
+        detailList: [],
         }
       };
     },
@@ -272,6 +276,11 @@
       InvoiceDetailManage
     },
     methods: {
+      isAdmin() {
+        const user = JSON.parse(sessionStorage.getItem('CurUser'));
+        console.log("setAdmin"+user);
+        return user && user.roleId === 0
+      },
       async updateStatus(id){
         
         try {
@@ -459,7 +468,8 @@
   }
     },
     created() {
-      this.fetchInvoices(); // 页面加载时获取发票列表
+      this.fetchInvoices();
+
     }
   };
   </script>
