@@ -47,6 +47,8 @@
         <el-table-column prop="type" label="类型"></el-table-column>
         <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column prop="pdfName" label="PDF文件名"></el-table-column>
+        <el-table-column prop="extera" label="价格备注"></el-table-column>
+        <!-- <el-table-column prop="pextera" label="图片题注"></el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="openEditForm(scope.row)">编辑</el-button>

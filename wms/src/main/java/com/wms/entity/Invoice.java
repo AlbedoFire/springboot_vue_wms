@@ -96,5 +96,11 @@ public class Invoice {
     @TableField("status")
     private String status;
 
+    @TableField("extera")
+    private String extera;
+
+    @TableField("pextra")
+    private String pextra;
+
 
 }
