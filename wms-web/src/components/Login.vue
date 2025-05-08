@@ -16,6 +16,9 @@
                     <el-form-item>
                         <el-button type="primary" @click="confirm" >确 定</el-button>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button type="text" @click="$router.replace('/register')">注册</el-button>
+                    </el-form-item>
                 </el-form>
             </div>
         </div>

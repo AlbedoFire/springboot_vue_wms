@@ -8,6 +8,11 @@ const routes = [
         component:()=>import('../components/Login')
     },
     {
+        path:'/register',
+        name:'register',
+        component:()=>import('../components/Register')
+    },
+    {
         path:'/Index',
         name:'index',
         component:()=>import('../components/Index'),
