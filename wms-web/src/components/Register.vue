@@ -95,14 +95,17 @@
     methods: {
       // 提交表单
       submitForm() {
+        
         this.$refs.registerForm.validate((valid) => {
           if (valid) {
+            this.registerForm['name'] = this.registerForm['no']
             // 表单验证通过，可以进行注册逻辑
             console.log('注册表单数据：', this.registerForm);
             axios.post('/user/save', this.registerForm)
               .then(response => {
                 // 处理注册成功的逻辑
                 this.$message.success('注册成功！');
+                this.$router.replace('/login')
                 console.log(response.data);
                 // 可以在这里跳转到登录页面或其他页面
               })
